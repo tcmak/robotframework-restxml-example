@@ -1,0 +1,12 @@
+*** Settings ***
+Library  RequestsLibrary
+Library  XML
+Suite Teardown  Delete All Sessions
+
+*** Test Cases ***
+Long URLs
+    Create Session  longurl  http://api.longurl.org
+    ${resp}=  Get  longurl  /v2/expand?url=http%3A%2F%2Fis.gd%2Fw
+    ${root}=	Parse XML	${resp.content}
+    Should Be Equal    ${root.tag}    response
+    Element Text Should Be	${root}	http://www.google.com/	xpath=long-url
